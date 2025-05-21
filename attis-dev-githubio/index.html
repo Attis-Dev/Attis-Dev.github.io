@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steam AppManifest Generátor - Atti</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="assets/logo.png" alt="Atti Logo" class="logo" />
+    <h1>Steam AppManifest Generátor</h1>
+    <p>Illeszd be az AppID-t (pl. <code>1888930</code>)</p>
+    <input type="text" id="appid" placeholder="AppID (pl. 1888930)" />
+    <button onclick="generateManifest()">Generálás</button>
+
+    <pre id="result"></pre>
+    <a id="downloadLink" style="display: none;" download="">Manifest letöltése</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
