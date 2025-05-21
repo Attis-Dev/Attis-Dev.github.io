@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Steam Manifest Generator by Atti</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .matrix-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+        }
+        .container {
+            margin-top: 100px;
+            border: 2px solid #00ff00;
+            padding: 40px;
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #111;
+            box-shadow: 0 0 30px #00ff00;
+        }
+        input, button {
+            background: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 16px;
+            padding: 10px;
+            width: 90%;
+            margin: 10px 0;
+        }
+        .logo {
+            font-size: 18px;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+<canvas class="matrix-bg"></canvas>
+
+<div class="container">
+    <div class="logo">
+ ___  _   _ _   _ _ _   
+/ _ \| | | | |_(_) |_ 
+| | | | | | | __| | __|
+| |_| | |_| | |_| | |_ 
+\__\_\\___/ \__|_|\__|
+
+Manifest Generator by Atti
+    </div>
+
+    <h2>Steam AppManifest Generátor</h2>
+    <input type="text" id="appid" placeholder="Válassz játékot vagy írd be az AppID-t:">
+    <input type="text" id="name" placeholder="Játék neve:">
+    <div id="status"></div>
+    <button onclick="generate()">Manifest generálása</button>
+</div>
+
+<script>
+async function generate() {
+    const appid = document.getElementById("appid").value.trim();
+    const name = document.getElementById("name").value.trim() || "Unknown";
+    const status = document.getElementById("status");
+    status.innerText = "";
+
+    if (!appid) {
+        status.innerText = "AppID megadása kötelező!";
+        return;
+    }
+
+    const manifest = `"AppState"
+{
+    "appid" "${appid}"
+    "Universe" "1"
+    "name" "${name}"
+    "StateFlags" "4"
+}`;
+
+    const blob = new Blob([manifest], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${appid}_${Math.floor(Math.random() * 9999999999999)}.manifest`;
+    a.click();
+}
+</script>
+
+<script>
+// MATRIX háttér effekt
+const canvas = document.querySelector(".matrix-bg");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = "01";
+const columns = canvas.width / 20;
+const drops = Array.from({ length: columns }).fill(1);
+
+function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = "20px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 20, drops[i] * 20);
+        if (drops[i] * 20 > canvas.height || Math.random() > 0.95) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+setInterval(drawMatrix, 50);
+</script>
+</body>
+</html>
